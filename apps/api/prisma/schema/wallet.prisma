@@ -1,0 +1,12 @@
+model Wallet {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  authId String @db.ObjectId
+  name   String
+
+  auth Auth @relation(fields: [authId], references: [id])
+
+  transaction Transaction[]
+  recurring   Recurring[]
+  category    Category[]
+  subcategory Subcategory[]
+}

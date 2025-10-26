@@ -1,0 +1,15 @@
+model Subcategory {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  icon      String?
+  isDefault Boolean @default(false)
+
+  categoryId String   @db.ObjectId
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  walletId String? @db.ObjectId
+  wallet   Wallet? @relation(fields: [walletId], references: [id])
+
+  transaction Transaction[]
+  recurring   Recurring[]
+}

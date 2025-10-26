@@ -1,0 +1,20 @@
+model Recurring {
+    id              String          @id @default(auto()) @map("_id") @db.ObjectId
+    name            String
+    amount          Int
+    interval        Int
+    type            TransactionType
+    startDate       DateTime
+    endDate         DateTime?
+    active          Boolean         @default(true)
+    lastGeneratedAt DateTime?
+    walletId        String          @db.ObjectId
+    categoryId      String          @db.ObjectId
+    subcategoryId   String?         @db.ObjectId
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @default(now())
+
+    wallet      Wallet       @relation(fields: [walletId], references: [id])
+    category    Category     @relation(fields: [categoryId], references: [id])
+    subcategory Subcategory? @relation(fields: [subcategoryId], references: [id])
+}

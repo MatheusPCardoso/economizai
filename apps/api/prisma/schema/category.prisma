@@ -1,0 +1,19 @@
+model Category {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  isDefault Boolean      @default(false)
+  icon      String?
+  type      CategoryType
+  walletId  String?      @db.ObjectId
+
+  subcategories Subcategory[]
+  recurring     Recurring[]
+  transaction   Transaction[]
+
+  wallet Wallet? @relation(fields: [walletId], references: [id])
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
