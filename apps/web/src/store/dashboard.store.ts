@@ -32,11 +32,11 @@ export interface CategoryExpense {
   percent?: number;
 }
 
-export interface Dashboard {
+export class Dashboard {
   id?: string;
-  currentMonth: Month;
-  lastMonth: Month;
-  transactionPerMonth: TransactionPerMonth[];
+  currentMonth!: Month;
+  lastMonth!: Month;
+  transactionPerMonth!: TransactionPerMonth[];
   expenseByCategoryTotal?: CategoryExpense[];
   expenseByCategoryCurrentMonth?: CategoryExpense[];
   expenseByCategoryMonthly?: CategoryExpense[];
@@ -49,11 +49,10 @@ class DashboardStore extends ManagerStore<Dashboard> {
   rootStore: RootStore;
   hydrated: boolean = false;
   constructor(rootStore: RootStore) {
-    super(rootStore, undefined, { isCollection: false });
+    super(rootStore, { storeName: "Dashboard", modelClass: Dashboard });
     this.rootStore = rootStore;
 
     makeObservable(this, {
-      initialLoad: action,
       setHydrated: action,
 
       create: override,
@@ -85,7 +84,6 @@ class DashboardStore extends ManagerStore<Dashboard> {
         },
       });
       if (!data) return;
-      console.log(data);
       this.create(data);
       this.setHydrated();
     } catch (error) {

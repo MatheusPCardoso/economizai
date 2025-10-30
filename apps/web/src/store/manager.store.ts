@@ -1,6 +1,7 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import RootStore from "./root";
 import { reviveDatesInObject } from "@helpers/revive-date";
+import { makePersistableByWallet } from "../helpers/persist-by-wallet";
 
 type ConstructorFor<T> = { new (root: RootStore): T };
 
@@ -13,11 +14,14 @@ class ManagerStore<T extends { id?: string } = { id?: string }> {
 
   constructor(
     rootStore: RootStore,
-    modelClass?: ConstructorFor<T>,
-    options?: { isCollection: boolean }
+    options: {
+      storeName: string;
+      isCollection?: boolean;
+      modelClass?: ConstructorFor<T>;
+    }
   ) {
     this.rootStore = rootStore;
-    this.ModelClass = modelClass;
+    this.ModelClass = options.modelClass;
 
     if (options) {
       const { isCollection } = options;
@@ -26,13 +30,22 @@ class ManagerStore<T extends { id?: string } = { id?: string }> {
     }
 
     makeObservable(this, {
-      items: computed,
       _objects: observable,
-      create: action,
-      createList: action,
-      update: action,
-      updateList: action,
-      delete: action,
+      items: computed,
+      first: computed,
+      initialLoad: action,
+      create: action.bound,
+      createList: action.bound,
+      update: action.bound,
+      updateList: action.bound,
+      delete: action.bound,
+      resetObjects: action.bound,
+    });
+
+    makePersistableByWallet({
+      store: this,
+      properties: ["_objects"],
+      storeName: options.storeName,
     });
   }
 
@@ -108,6 +121,10 @@ class ManagerStore<T extends { id?: string } = { id?: string }> {
     }
 
     return instance;
+  }
+
+  resetObjects() {
+    this._objects = [];
   }
 }
 

@@ -2,6 +2,7 @@ import axiosClient from "@lib/http.service";
 import { action, computed, makeObservable, reaction, runInAction } from "mobx";
 import RootStore from "./root";
 import ManagerStore from "./manager.store";
+import { makePersistable } from "mobx-persist-store";
 
 export class Subcategory {
   id!: string;
@@ -23,26 +24,21 @@ export class Category {
 class CategoryStore extends ManagerStore<Category> {
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
-    super(rootStore, Category);
+    super(rootStore, { storeName: "Category", modelClass: Category });
     this.rootStore = rootStore;
 
     makeObservable(this, {
-      initialLoad: action,
       createCategory: action.bound,
       updateCategory: action.bound,
-      deleteCategory: action,
       createSubcategory: action.bound,
       updateSubcategory: action.bound,
-      deleteSubcategory: action,
-      getCategoryById: action,
-      incomes: computed,
-      expenses: computed,
     });
 
     reaction(
       () => this.rootStore.walletStore.currentWalletId,
       (currentWalletId, prevValue) => {
         if (currentWalletId && prevValue !== currentWalletId) {
+          this.resetObjects();
           this.initialLoad();
         }
       }

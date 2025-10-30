@@ -1,15 +1,14 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import RootStore from "./root";
-import { observer } from "mobx-react-lite";
 
 const StoreContext = createContext<RootStore | null>(null);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const store = new RootStore();
+  const [store] = useState(() => new RootStore());
   return (
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
   );

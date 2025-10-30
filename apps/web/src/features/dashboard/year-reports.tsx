@@ -45,8 +45,6 @@ const ReportsLine = observer(() => {
     balance: { label: "Saldo", color: "white" },
   } satisfies ChartConfig;
 
-  console.log(chartData);
-
   return (
     <DateRangeApexChart
       data={chartData}

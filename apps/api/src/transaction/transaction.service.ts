@@ -2,28 +2,23 @@ import { DatabaseService } from '@/database/database.service'
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { CreateTransactionDto, UpdateTransactionDto } from './transaction.dto'
 import { TransactionType } from '@prisma/client'
+import { startOfDay, subMonths } from 'date-fns'
 
 @Injectable()
 export class TransactionService {
   constructor(private readonly dbService: DatabaseService) {}
 
-  async findBalancedByWalletId(walletId: string, take = 250, skip = 0) {
-    const takePerType = isNaN(take) ? 250 : take
-    const skipPerType = isNaN(skip) ? 0 : skip
-
+  async findBalancedByWalletId(walletId: string) {
+    const gte = startOfDay(subMonths(new Date(), 12))
     const [incomes, expenses] = await Promise.all([
       this.dbService.transaction.findMany({
-        where: { walletId, type: TransactionType.INCOME },
-        take: takePerType,
-        skip: skipPerType,
+        where: { walletId, type: TransactionType.INCOME, createdAt: { gte } },
         orderBy: {
           reference: 'desc',
         },
       }),
       this.dbService.transaction.findMany({
-        where: { walletId, type: TransactionType.EXPENSE },
-        take: takePerType,
-        skip: skipPerType,
+        where: { walletId, type: TransactionType.EXPENSE, createdAt: { gte } },
         orderBy: {
           reference: 'desc',
         },

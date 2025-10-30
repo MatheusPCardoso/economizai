@@ -24,7 +24,7 @@ export class Recurring {
 export class RecurringStore extends ManagerStore<Recurring> {
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
-    super(rootStore, Recurring);
+    super(rootStore, { storeName: "Recurring", modelClass: Recurring });
     this.rootStore = rootStore;
 
     makeObservable(this, {
@@ -32,7 +32,6 @@ export class RecurringStore extends ManagerStore<Recurring> {
       incomes: computed,
       all: computed,
 
-      initialLoad: action,
       createRecurring: action.bound,
       updateRecurring: action.bound,
       deleteRecurring: action.bound,
@@ -42,6 +41,7 @@ export class RecurringStore extends ManagerStore<Recurring> {
       () => this.rootStore.walletStore.currentWalletId,
       (currentWalletId, prevValue) => {
         if (currentWalletId && prevValue !== currentWalletId) {
+          this.resetObjects();
           this.initialLoad();
         }
       }

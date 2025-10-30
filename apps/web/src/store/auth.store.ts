@@ -16,7 +16,7 @@ class AuthStore extends ManagerStore<Auth> {
   auth: Auth | null = null;
 
   constructor(rootStore: RootStore) {
-    super(rootStore, Auth);
+    super(rootStore, { storeName: "Auth", modelClass: Auth });
     this.rootStore = rootStore;
 
     makeObservable(this, {

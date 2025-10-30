@@ -21,7 +21,7 @@ class WalletStore extends ManagerStore<Wallet> {
   currentWalletId: string | null = null;
 
   constructor(store: RootStore) {
-    super(store);
+    super(store, { storeName: "Wallet", modelClass: Wallet });
     this.rootStore = store;
 
     makeObservable(this, {
@@ -31,7 +31,6 @@ class WalletStore extends ManagerStore<Wallet> {
       wallet: computed,
 
       setWalletId: action,
-      initialLoad: action,
       createWallet: action,
     });
 
@@ -60,7 +59,6 @@ class WalletStore extends ManagerStore<Wallet> {
         data.forEach((item: Wallet) => this.create(item));
         this.isHydrated = true;
         if (!data.length) return;
-        console.log(data[0]!.id);
         this.setWalletId(data[0]!.id);
       });
     } catch (error) {
@@ -96,7 +94,6 @@ class WalletStore extends ManagerStore<Wallet> {
 
   setWallets(wallets: Wallet[]) {
     if (!wallets.length) return;
-    console.log(wallets);
     this.createList(wallets);
     this.setWalletId(wallets[0]!.id);
   }

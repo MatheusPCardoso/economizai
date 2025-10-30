@@ -7,7 +7,6 @@ import { toJS } from "mobx";
 const RevenueStats = observer(() => {
   const { dashboardStore } = useStore();
   const currentMonth = dashboardStore.dashboardData?.currentMonth;
-  console.log(toJS(dashboardStore.dashboard));
   const statsData: StatsCardProps = {
     description: "Receita Mensal",
     value: currentMonth?.incoming || 0,

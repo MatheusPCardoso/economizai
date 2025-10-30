@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { TransactionService } from './transaction.service'
 import { CreateTransactionDto, UpdateTransactionDto } from './transaction.dto'
 
@@ -7,16 +7,8 @@ export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
   @Get('/wallet/:walletId')
-  async findBalancedByWallet(
-    @Param('walletId') walletId: string,
-    @Query('take') take: string,
-    @Query('skip') skip: string
-  ) {
-    return await this.transactionService.findBalancedByWalletId(
-      walletId,
-      Number(take),
-      Number(skip)
-    )
+  async getLastTwelveMonthsTransactions(@Param('walletId') walletId: string) {
+    return await this.transactionService.findBalancedByWalletId(walletId)
   }
 
   @Post()

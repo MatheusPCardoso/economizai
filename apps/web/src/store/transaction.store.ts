@@ -20,13 +20,11 @@ export class Transaction {
 
 export class TransactionStore extends ManagerStore<Transaction> {
   rootStore: RootStore;
-  private skipPerType = 0;
   constructor(rootStore: RootStore) {
-    super(rootStore, Transaction);
+    super(rootStore, { storeName: "Transaction", modelClass: Transaction });
     this.rootStore = rootStore;
 
     makeObservable(this, {
-      initialLoad: action,
       loadTransactions: action,
       createTransaction: action.bound,
       updateTransaction: action.bound,
@@ -40,6 +38,7 @@ export class TransactionStore extends ManagerStore<Transaction> {
       () => this.rootStore.walletStore.currentWalletId,
       (currentWalletId, prevValue) => {
         if (currentWalletId && prevValue !== currentWalletId) {
+          this.resetObjects();
           this.initialLoad();
         }
       }
@@ -50,16 +49,9 @@ export class TransactionStore extends ManagerStore<Transaction> {
     try {
       if (!this.rootStore.walletStore.currentWalletId) return;
       const { data } = await axiosClient.get<Transaction[]>(
-        `/transactions/wallet/${this.rootStore.walletStore.currentWalletId}`,
-        {
-          params: {
-            take: 250,
-            skip: 0,
-          },
-        }
+        `/transactions/wallet/${this.rootStore.walletStore.currentWalletId}`
       );
       if (!data) return;
-      this.skipPerType = 250;
       data.map((item: Transaction) => this.create(item));
     } catch (error) {
       console.error("Erro ao carregar transações:", error);
@@ -69,17 +61,9 @@ export class TransactionStore extends ManagerStore<Transaction> {
   async loadTransactions(walletId: string) {
     try {
       const { data } = await axiosClient.get<Transaction[]>(
-        `/transaction/wallet/balanced`,
-        {
-          params: {
-            id: walletId,
-            take: 250,
-            skip: this.skipPerType,
-          },
-        }
+        `/transaction/wallet/balanced`
       );
       if (!data) return;
-      this.skipPerType += 250;
       data.map((item: Transaction) => this.create(item));
     } catch (error) {
       console.error("Erro ao carregar transações:", error);
