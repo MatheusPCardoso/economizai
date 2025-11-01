@@ -9,9 +9,15 @@ import RevenueStats from "@features/dashboard/revenue-stats";
 import SpentStats from "@features/dashboard/expense-stats";
 import BalanceStats from "@features/dashboard/balance-stats";
 import { useStore } from "@/src/store/store.context";
+import { useEffect } from "react";
 
 const DashboardPage = observer(() => {
-  const { dashboardStore } = useStore();
+  const { dashboardStore, transactionStore } = useStore();
+
+  useEffect(() => {
+    dashboardStore.initialLoad();
+  }, []);
+
   return (
     <div className="w-full mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -32,7 +38,18 @@ const DashboardPage = observer(() => {
 
         <Card className="lg:col-span-3 px-4 h-[25vh]">
           <div className="flex flex-col gap-4 h-full w-full">
-            <DisplayItems type="all" showSkeleton={!dashboardStore.hydrated} />
+            {transactionStore.items.length > 0 ? (
+              <DisplayItems
+                type="all"
+                showSkeleton={!dashboardStore.hydrated}
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full">
+                <span className="font-semibold text-2xl">
+                  Nenhuma transação encontrada
+                </span>
+              </div>
+            )}
           </div>
         </Card>
       </div>

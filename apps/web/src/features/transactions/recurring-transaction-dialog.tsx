@@ -248,7 +248,7 @@ const RecurringTransactionDialog = ({
                 <div>
                   <Label htmlFor="categoryId">Categoria</Label>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="w-full mt-1">
                       <SelectValue placeholder="Selecione uma categoria" />
                     </SelectTrigger>
                     <SelectContent>
@@ -277,7 +277,7 @@ const RecurringTransactionDialog = ({
                   <div>
                     <Label htmlFor="subcategoryId">Subcategoria</Label>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="w-full mt-1">
                         <SelectValue placeholder="Selecione uma subcategoria" />
                       </SelectTrigger>
                       <SelectContent>

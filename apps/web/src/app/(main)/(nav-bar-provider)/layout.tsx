@@ -3,7 +3,7 @@
 import { InfoBar } from "@components/infobar";
 import NavBar from "@components/navbar";
 import { Separator } from "@components/ui/separator";
-import { InitStoreProvider, useStore } from "@store/store.context";
+import { useStore } from "@store/store.context";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -34,16 +34,14 @@ const SidebarLayout = observer(
     }, [hydrated, auth, router, wallets]);
 
     return (
-      <InitStoreProvider>
-        <div className="flex w-full h-screen">
-          <NavBar />
-          <div className="w-full overflow-auto p-4">
-            <InfoBar />
-            <Separator className="my-4" />
-            <div className="w-full h-[85vh]">{children}</div>
-          </div>
+      <div className="flex w-full h-screen">
+        <NavBar />
+        <div className="w-full overflow-auto p-4">
+          <InfoBar />
+          <Separator className="my-4" />
+          <div className="w-full h-[85vh]">{children}</div>
         </div>
-      </InitStoreProvider>
+      </div>
     );
   }
 );

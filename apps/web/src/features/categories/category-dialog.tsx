@@ -138,7 +138,7 @@ const CategoryDialog = ({
               <div>
                 <Label htmlFor="icon">Ícone da Categoria</Label>
                 <Select onValueChange={field.onChange} {...field}>
-                  <SelectTrigger className="mt-1">
+                  <SelectTrigger className="mt-1 w-full">
                     <SelectValue placeholder="Selecione um ícone" />
                   </SelectTrigger>
                   <SelectContent>
@@ -166,7 +166,7 @@ const CategoryDialog = ({
 
           <div>
             <Label>Subcategorias (opcional)</Label>
-            <div className="space-y-2 mt-1 max-h-[200px] overflow-y-auto pr-2">
+            <div className="space-y-2 mt-1 max-h-[200px] overflow-y-auto">
               {fields.map((field, index) => (
                 <div key={field.id} className="flex items-start gap-2 py-1">
                   <div className="flex-1 space-y-1">
