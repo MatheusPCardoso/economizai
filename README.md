@@ -1,4 +1,4 @@
-# 💰 EconomizAi
+# 💰 Economizai
 
 Um aplicativo fullstack para **gerenciar finanças pessoais** de forma simples e eficiente.  
 Com o **EconomizAi**, você pode criar **carteiras** e registrar **transações** (entradas e saídas), acompanhando o saldo total e o histórico de gastos em um só lugar.
